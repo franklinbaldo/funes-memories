@@ -1,0 +1,32 @@
+<svg width="1200" height="630" xmlns="http://www.w3.org/2000/svg">
+    <rect width="100%" height="100%" fill="#0a0a0a"/>
+    <style>
+        .text { font-family: monospace; fill: #00ff00; }
+        .dim { opacity: 0.5; }
+        .blink { animation: blinker 1s linear infinite; }
+        @keyframes blinker { 50% { opacity: 0; } }
+    </style>
+    <text x="20" y="30" class="text" style="opacity:0.10901908131200921; font-size: 14px;"> 0M O0C10E   1  OPYE 0PCPE0S0 MR 0P0 </text>
+<text x="20" y="60" class="text" style="opacity:0.13049420974059184; font-size: 14px;">EMOM001F10SRL00 AL R0CL0  1S00O  0R1 P0 Y AE0R R1CO</text>
+<text x="20" y="90" class="text" style="opacity:0.19342359596902742; font-size: 14px;">PCO0 YF1 Y 1EOA0 Y</text>
+<text x="20" y="120" class="text" style="opacity:0.2278999566552702; font-size: 14px;">1 C10C1RY11RO0MER0O E EE OO FL L E 1</text>
+<text x="20" y="150" class="text" style="opacity:0.2913996621734169; font-size: 14px;">E  RS1 RFFL01CLE1Y0EAA</text>
+<text x="20" y="180" class="text" style="opacity:0.12269186163070517; font-size: 14px;">1RR110S YL 1 ESLE1EEO010R 1LCR00R0R01 FY EOS0C  L 1FSL11011LL E1OL</text>
+<text x="20" y="210" class="text" style="opacity:0.21342679262334718; font-size: 14px;">1F OP RMFEMSAL0CO 01 OP1E M EESPMROSF 0OS11ES1M 000F0O O 1E</text>
+<text x="20" y="240" class="text" style="opacity:0.2474740588626243; font-size: 14px;">R1M1 YR 00C1 OE1101  1  1SO1C01O1 RC1P0CA0R0SM L0</text>
+<text x="20" y="270" class="text" style="opacity:0.26943494623221964; font-size: 14px;">E MR O0OEEM 1M10 S  OP10LE11S CS    M E0LML0M10MESL0CO L0SS</text>
+<text x="20" y="300" class="text" style="opacity:0.19887494281753634; font-size: 14px;">00 MOY00E0SY0  RA RE</text>
+<text x="20" y="330" class="text" style="opacity:0.23565553255262675; font-size: 14px;">FC0O1AC  P 0O C0 EM0 RR1  M   R0Y</text>
+<text x="20" y="360" class="text" style="opacity:0.1422522500368433; font-size: 14px;">ES00L  PCCSRE OYP F  CE RS0LYAO0 C1R00LOE1C0CM0  A   S 10EFEERF S LEEEMM01R OM</text>
+<text x="20" y="390" class="text" style="opacity:0.11337992656071974; font-size: 14px;">1RO 1M0M01Y E 0F10M0Y 1R CCRE10YPAERRS</text>
+<text x="20" y="420" class="text" style="opacity:0.2715453535278681; font-size: 14px;">ES OO110LR0     1OL</text>
+<text x="20" y="450" class="text" style="opacity:0.14501388636376294; font-size: 14px;">Y ME01OPC1O</text>
+<text x="20" y="480" class="text" style="opacity:0.27319190211780575; font-size: 14px;">0RPC11 RRORLERMSRO0  CRO0CES0O1S0 OLME  E</text>
+<text x="20" y="510" class="text" style="opacity:0.29128161299376887; font-size: 14px;">RMR1MFOSOE ER RS01MMMO0PCRF0E10 R OM AOO10C0O SA1  1EMO P ME0 SRL1E E   11   RS</text>
+<text x="20" y="540" class="text" style="opacity:0.2559052186418014; font-size: 14px;">SCOCOL0 10O1 O 1 CRSMCF00SOCEC1C  ROA 1ELP0CEMP</text>
+<text x="20" y="570" class="text" style="opacity:0.2153912528168307; font-size: 14px;"> OM0E0 ELA ERE R0CELRE OSL1S   0A00R1FM </text>
+<text x="20" y="600" class="text" style="opacity:0.11031250278004517; font-size: 14px;">S1 E1YOF1 10 01L0 R01E0POP E1E 1 R R LO 1LL0Y   RS1RE O1OS</text>
+
+    <text x="50%" y="45%" dominant-baseline="middle" text-anchor="middle" class="text" font-size="64" font-weight="bold">FUNES REMEMBERS</text>
+    <text x="50%" y="55%" dominant-baseline="middle" text-anchor="middle" class="text dim" font-size="32">MEMORY SYSTEM: ONLINE</text>
+    <rect x="860" y="335" width="20" height="40" fill="#00ff00" class="blink" /><rect x="10" y="10" width="1180" height="610" fill="none" stroke="#00ff00" stroke-width="2"/></svg>
