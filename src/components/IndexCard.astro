@@ -1,0 +1,148 @@
+---
+// components/IndexCard.astro
+import FormattedDate from './FormattedDate.astro';
+
+interface Props {
+  title: string;
+  date: Date;
+  slug: string;
+  description?: string;
+  tags?: string[];
+  id?: string;
+}
+
+const { title, date, slug, description, tags = [], id } = Astro.props;
+const baseUrl = import.meta.env.BASE_URL;
+
+// Generate a pseudo catalog number if not provided
+const catalogNumber = id ? `MEM.${id}` : `MEM.${date.getFullYear()}.${Math.floor(Math.random() * 1000).toString().padStart(3, '0')}`;
+---
+
+<a href={`${baseUrl}blog/${slug}/`} class="index-card-link">
+  <article class="index-card">
+    <div class="card-header">
+      <span class="catalog-number">{catalogNumber}</span>
+      <span class="hole-punch"></span>
+    </div>
+
+    <div class="card-content">
+      <h3 class="title">{title.toUpperCase()}</h3>
+      <div class="timestamp">
+        <FormattedDate date={date} />
+      </div>
+
+      {description && (
+        <p class="description">{description}</p>
+      )}
+
+      <div class="tags">
+        {tags.map(tag => <span class="tag">#{tag}</span>)}
+      </div>
+    </div>
+
+    <div class="card-footer">
+      <span class="read-more">[ACCESS MEMORY →]</span>
+    </div>
+  </article>
+</a>
+
+<style>
+  .index-card-link {
+    text-decoration: none;
+    display: block;
+    margin-bottom: var(--space-lg);
+  }
+
+  .index-card {
+    background: var(--funes-bg-paper);
+    border: 1px solid var(--funes-text-dimmer);
+    padding: var(--space-md);
+    box-shadow: var(--shadow-card);
+    transition: transform var(--transition-fast), box-shadow var(--transition-fast);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .index-card:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-lifted);
+    border-color: var(--funes-terminal);
+  }
+
+  .card-header {
+    border-bottom: 1px solid var(--funes-text-dimmer);
+    padding-bottom: var(--space-xs);
+    margin-bottom: var(--space-md);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .catalog-number {
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    color: var(--funes-text-dim);
+    letter-spacing: 1px;
+  }
+
+  .hole-punch {
+    width: 12px;
+    height: 12px;
+    background: var(--funes-bg-dark);
+    border-radius: 50%;
+    box-shadow: inset 0 1px 3px rgba(0,0,0,0.5);
+  }
+
+  .title {
+    font-family: var(--font-serif);
+    font-size: var(--text-lg);
+    color: var(--funes-text-main);
+    margin: 0 0 var(--space-xs) 0;
+    line-height: 1.2;
+  }
+
+  .timestamp {
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    color: var(--funes-text-dim);
+    margin-bottom: var(--space-md);
+  }
+
+  .description {
+    font-size: var(--text-sm);
+    color: var(--funes-text-dim);
+    margin-bottom: var(--space-md);
+    line-height: 1.5;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-xs);
+    margin-bottom: var(--space-md);
+  }
+
+  .tag {
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    color: var(--funes-link);
+    opacity: 0.8;
+  }
+
+  .card-footer {
+    border-top: 1px dashed var(--funes-text-dimmer);
+    padding-top: var(--space-sm);
+    text-align: right;
+  }
+
+  .read-more {
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    color: var(--funes-terminal);
+    font-weight: bold;
+  }
+</style>
