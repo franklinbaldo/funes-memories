@@ -1,0 +1,115 @@
+---
+const { pathname } = Astro.url;
+const baseUrl = import.meta.env.BASE_URL.replace(/\/$/, '');
+
+const isActive = (path: string) => {
+    const fullPath = `${baseUrl}${path}`;
+    if (path === '/') return pathname === fullPath || pathname === `${fullPath}/`;
+    return pathname.startsWith(fullPath);
+};
+---
+
+<nav class="file-tree">
+    <div class="root">
+        <span class="folder-icon">📂</span>
+        <span class="root-name">~/memoria/</span>
+    </div>
+    <ul class="tree">
+        <li>
+            <div class={`entry ${isActive('/blog') ? 'active' : ''}`}>
+                <span class="tree-line">├─</span>
+                <span class="icon">📂</span>
+                <a href={`${baseUrl}/blog`}>journal/</a>
+            </div>
+        </li>
+        <li>
+            <div class="entry">
+                <span class="tree-line">├─</span>
+                <span class="icon">📂</span>
+                <span class="dim">bank/</span>
+            </div>
+        </li>
+        <li>
+            <div class={`entry ${isActive('/about') ? 'active' : ''}`}>
+                <span class="tree-line">├─</span>
+                <span class="icon">📄</span>
+                <a href={`${baseUrl}/about`}>about.md</a>
+            </div>
+        </li>
+        <li>
+            <div class={`entry ${isActive('/') && !isActive('/blog') && !isActive('/about') ? 'active' : ''}`}>
+                <span class="tree-line">└─</span>
+                <span class="icon">📄</span>
+                <a href={`${baseUrl}/`}>README.md</a>
+            </div>
+        </li>
+    </ul>
+</nav>
+
+<style>
+    .file-tree {
+        font-family: var(--font-mono);
+        font-size: var(--text-sm);
+        color: var(--funes-text-dim);
+        padding-top: var(--space-lg);
+        width: 100%;
+    }
+
+    .root {
+        color: var(--funes-terminal);
+        font-weight: bold;
+        margin-bottom: var(--space-xs);
+    }
+
+    .tree {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+
+    .entry {
+        display: flex;
+        align-items: center;
+        padding: 2px 0;
+        transition: color var(--transition-fast);
+        white-space: nowrap;
+    }
+
+    .entry:hover {
+        color: var(--funes-text-main);
+    }
+
+    .entry.active {
+        color: var(--funes-terminal);
+    }
+
+    .entry.active a {
+        color: var(--funes-terminal);
+    }
+
+    a {
+        color: inherit;
+        text-decoration: none;
+    }
+
+    a:hover {
+        text-decoration: none;
+        color: var(--funes-text-main);
+    }
+
+    .tree-line {
+        color: var(--funes-text-dimmer);
+        margin-right: 0.5em;
+        white-space: pre;
+    }
+
+    .icon {
+        margin-right: 0.5em;
+        font-size: 0.9em;
+    }
+
+    .dim {
+        opacity: 0.5;
+        cursor: not-allowed;
+    }
+</style>

@@ -15,6 +15,14 @@ const blog = defineCollection({
 			heroImage: image().optional(),
 			tags: z.array(z.string()).optional(),
 			draft: z.boolean().optional(),
+
+            // New fields for Funes Archive
+            id: z.string().optional(),
+            type: z.array(z.string()).optional(),
+            project: z.array(z.string()).optional(),
+            entities: z.array(z.string()).optional(),
+            related: z.array(z.string()).optional(),
+            committed: z.string().optional(),
 		}),
 });
 

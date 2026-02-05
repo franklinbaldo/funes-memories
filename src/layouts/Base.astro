@@ -1,0 +1,122 @@
+---
+import BaseHead from '../components/BaseHead.astro';
+import TerminalHeader from '../components/TerminalHeader.astro';
+import FileTree from '../components/FileTree.astro';
+import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
+
+interface Props {
+	title?: string;
+	description?: string;
+    path?: string;
+    mode?: 'reading' | 'writing';
+    heroImage?: any;
+}
+
+const { title = SITE_TITLE, description = SITE_DESCRIPTION, path, mode, heroImage } = Astro.props;
+---
+
+<!doctype html>
+<html lang="en">
+	<head>
+		<BaseHead title={title} description={description} image={heroImage} />
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	</head>
+	<body>
+        <TerminalHeader path={path} mode={mode} />
+
+        <div class="layout-grid">
+            <aside class="sidebar-nav">
+                <FileTree />
+            </aside>
+
+            <main class="content-area">
+                <slot />
+            </main>
+
+            <aside class="sidebar-meta">
+                <slot name="meta" />
+            </aside>
+        </div>
+	</body>
+</html>
+
+<style>
+    .layout-grid {
+        display: grid;
+        grid-template-columns: var(--nav-width) 1fr var(--meta-width);
+        min-height: calc(100vh - var(--header-height));
+        margin-top: var(--header-height);
+    }
+
+    .sidebar-nav {
+        position: fixed;
+        top: var(--header-height);
+        left: 0;
+        bottom: 0;
+        width: var(--nav-width);
+        background-color: var(--funes-bg-dark);
+        border-right: 1px solid var(--funes-bg-hover);
+        overflow-y: auto;
+        padding-bottom: var(--space-xl);
+        padding-left: var(--space-lg);
+    }
+
+    .content-area {
+        grid-column: 2;
+        padding: var(--space-xl) var(--space-2xl);
+        max-width: var(--content-max-width);
+        margin: 0 auto;
+        width: 100%;
+        box-sizing: border-box;
+    }
+
+    .sidebar-meta {
+        position: fixed;
+        top: var(--header-height);
+        right: 0;
+        bottom: 0;
+        width: var(--meta-width);
+        background-color: var(--funes-bg-dark);
+        border-left: 1px dashed var(--funes-bg-hover);
+        overflow-y: auto;
+        padding: var(--space-lg);
+        display: none; /* Hidden by default on small screens */
+    }
+
+    /* Responsive Design */
+    @media (min-width: 1200px) {
+        .sidebar-meta {
+            display: block;
+        }
+    }
+
+    @media (max-width: 1200px) {
+        .layout-grid {
+            grid-template-columns: var(--nav-width) 1fr;
+        }
+        .content-area {
+            grid-column: 2;
+        }
+    }
+
+    @media (max-width: 768px) {
+        .layout-grid {
+            display: block;
+            margin-top: var(--header-height);
+        }
+
+        .sidebar-nav {
+            position: static;
+            width: 100%;
+            height: auto;
+            border-right: none;
+            border-bottom: 1px solid var(--funes-bg-hover);
+            padding: var(--space-md);
+        }
+
+        .content-area {
+            padding: var(--space-lg) var(--space-md);
+        }
+    }
+</style>

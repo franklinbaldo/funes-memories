@@ -1,0 +1,166 @@
+---
+import FormattedDate from './FormattedDate.astro';
+
+interface Props {
+	title: string;
+	pubDate: Date;
+	description: string;
+	tags?: string[];
+	url: string;
+    id?: string;
+}
+
+const { title, pubDate, description, tags = [], url, id = '000.000.000' } = Astro.props;
+
+// Generate a fake Dewey decimal number based on the date if ID is default
+const catalogNumber = id !== '000.000.000' ? id : `025.${pubDate.getFullYear()}.${Math.floor(Math.random() * 999).toString().padStart(3, '0')}`;
+---
+
+<article class="index-card">
+    <div class="card-header">
+        <span class="catalog-number">{catalogNumber}</span>
+        <span class="hole"></span>
+    </div>
+
+    <div class="card-content">
+        <h3 class="title">
+            <a href={url}>{title.toUpperCase()}</a>
+        </h3>
+        <div class="meta">
+            <FormattedDate date={pubDate} />
+        </div>
+
+        <p class="description">
+            {description}
+        </p>
+
+        <div class="tags">
+            {tags.map((tag) => <span class="tag">#{tag}</span>)}
+        </div>
+    </div>
+
+    <div class="card-footer">
+        <span class="divider"></span>
+        <a href={url} class="read-more">[READ MORE →]</a>
+    </div>
+</article>
+
+<style>
+    .index-card {
+        background-color: var(--funes-bg-paper);
+        border: 1px solid var(--funes-bg-hover);
+        padding: var(--space-md);
+        position: relative;
+        transition: transform var(--transition-fast), box-shadow var(--transition-fast);
+        box-shadow: var(--shadow-card);
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+    }
+
+    .index-card:hover {
+        transform: translateY(-2px);
+        box-shadow: var(--shadow-lifted);
+        border-color: var(--funes-text-dimmer);
+    }
+
+    .card-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        margin-bottom: var(--space-md);
+        border-bottom: 2px solid var(--funes-bg-hover);
+        padding-bottom: var(--space-xs);
+    }
+
+    .catalog-number {
+        font-family: var(--font-mono);
+        font-size: var(--text-xs);
+        color: var(--funes-text-dim);
+    }
+
+    .hole {
+        width: 12px;
+        height: 12px;
+        background-color: var(--funes-bg-dark);
+        border-radius: 50%;
+        box-shadow: inset 0 1px 2px rgba(0,0,0,0.5);
+    }
+
+    .card-content {
+        flex-grow: 1;
+    }
+
+    .title {
+        font-family: var(--font-mono);
+        font-size: var(--text-lg);
+        margin: 0 0 var(--space-xs) 0;
+        line-height: 1.4;
+    }
+
+    .title a {
+        color: var(--funes-text-main);
+    }
+
+    .title a:hover {
+        color: var(--funes-terminal);
+        text-decoration: none;
+    }
+
+    .meta {
+        font-family: var(--font-mono);
+        font-size: var(--text-xs);
+        color: var(--funes-text-dim);
+        margin-bottom: var(--space-md);
+    }
+
+    .description {
+        font-family: var(--font-serif);
+        font-size: var(--text-base);
+        color: var(--funes-text-dim);
+        margin-bottom: var(--space-lg);
+        display: -webkit-box;
+        -webkit-line-clamp: 4;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+    }
+
+    .tags {
+        display: flex;
+        flex-wrap: wrap;
+        gap: var(--space-xs);
+        margin-bottom: var(--space-md);
+    }
+
+    .tag {
+        font-family: var(--font-mono);
+        font-size: var(--text-xs);
+        color: var(--funes-memory);
+        text-transform: uppercase;
+    }
+
+    .card-footer {
+        margin-top: auto;
+    }
+
+    .divider {
+        display: block;
+        height: 1px;
+        background-color: var(--funes-bg-hover);
+        margin-bottom: var(--space-sm);
+    }
+
+    .read-more {
+        font-family: var(--font-mono);
+        font-size: var(--text-xs);
+        color: var(--funes-terminal);
+        display: block;
+        text-align: right;
+    }
+
+    .read-more:hover {
+        text-decoration: none;
+        color: var(--funes-link);
+    }
+</style>
