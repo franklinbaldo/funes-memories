@@ -1,0 +1,109 @@
+---
+import TerminalHeader from '../components/TerminalHeader.astro';
+import FileTree from '../components/FileTree.astro';
+import '../styles/global.css';
+
+interface Props {
+	title: string;
+	description?: string;
+    path?: string;
+    mode?: 'reading' | 'writing';
+}
+
+const { title, description, path = 'memoria', mode = 'reading' } = Astro.props;
+---
+
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="description" content={description} />
+		<meta name="viewport" content="width=device-width" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="generator" content={Astro.generator} />
+		<title>{title}</title>
+	</head>
+	<body>
+        <TerminalHeader path={path} mode={mode} />
+
+        <div class="layout-grid">
+            <aside class="sidebar-nav">
+                <div class="sticky-wrapper">
+                    <FileTree activePath={Astro.url.pathname} />
+                </div>
+            </aside>
+
+            <main class="content-area">
+                <slot />
+            </main>
+
+            <aside class="sidebar-meta">
+                <div class="sticky-wrapper">
+                    <slot name="meta" />
+                </div>
+            </aside>
+        </div>
+	</body>
+</html>
+
+<style>
+    .layout-grid {
+        display: grid;
+        grid-template-columns: var(--nav-width) minmax(0, 1fr) var(--meta-width);
+        max-width: 1600px;
+        margin: 0 auto;
+        padding-top: var(--header-height);
+        min-height: 100vh;
+    }
+
+    .sidebar-nav {
+        border-right: 1px solid var(--funes-bg-hover);
+        background: var(--funes-bg-dark);
+        /* Hide scrollbar if content is small */
+    }
+
+    .sidebar-meta {
+        border-left: 1px dashed var(--funes-bg-hover);
+        font-size: var(--text-xs);
+        color: var(--funes-text-dim);
+    }
+
+    .sticky-wrapper {
+        position: sticky;
+        top: var(--header-height);
+        height: calc(100vh - var(--header-height));
+        overflow-y: auto;
+    }
+
+    .content-area {
+        padding: var(--space-xl);
+        max-width: var(--content-max-width);
+        width: 100%;
+        margin: 0 auto;
+    }
+
+    @media (max-width: 1200px) {
+        .layout-grid {
+            grid-template-columns: var(--nav-width) 1fr;
+        }
+        .sidebar-meta {
+            display: none;
+        }
+    }
+
+    @media (max-width: 768px) {
+        .layout-grid {
+            display: block; /* Stack vertically */
+            padding-top: var(--header-height);
+        }
+        .sidebar-nav {
+            display: none; /* Hide nav for now on mobile */
+        }
+        .content-area {
+            padding: var(--space-md);
+        }
+        .sidebar-meta {
+            display: none;
+        }
+    }
+</style>

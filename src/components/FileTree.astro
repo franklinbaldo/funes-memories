@@ -1,0 +1,118 @@
+---
+const { activePath } = Astro.props;
+const base = import.meta.env.BASE_URL.replace(/\/$/, ''); // Ensure no trailing slash for consistency
+---
+
+<nav class="file-tree">
+  <div class="root">
+    <span class="folder">~/memoria/</span>
+  </div>
+
+  <ul class="tree-list">
+    <li>
+      <details open>
+        <summary class="folder-group">
+            <span class="icon">📂</span> journal/
+        </summary>
+        <ul>
+            <li>
+                <a href={`${base}/journal/2026-02-05`} class={activePath?.includes('2026-02-05') ? 'active' : ''}>
+                    2026-02-05.md
+                </a>
+            </li>
+            <!-- Placeholder for more entries -->
+        </ul>
+      </details>
+    </li>
+
+    <li>
+      <details>
+        <summary class="folder-group">
+            <span class="icon">📂</span> bank/
+        </summary>
+        <ul>
+            <li><a href={`${base}/bank/experience`}>experience.md</a></li>
+            <li><a href={`${base}/bank/projects`}>projects/</a></li>
+        </ul>
+      </details>
+    </li>
+
+    <li>
+        <a href={`${base}/about`} class="file-link">
+            <span class="icon">📄</span> about.md
+        </a>
+    </li>
+
+    <li>
+        <a href={`${base}/`} class="file-link">
+            <span class="icon">📄</span> README.md
+        </a>
+    </li>
+  </ul>
+</nav>
+
+<style>
+  .file-tree {
+    font-family: var(--font-mono);
+    font-size: var(--text-sm);
+    color: var(--funes-text-dim);
+    padding: var(--space-md);
+    width: 100%;
+  }
+
+  .root {
+    margin-bottom: var(--space-sm);
+    color: var(--funes-terminal);
+    font-weight: bold;
+  }
+
+  ul {
+    list-style: none;
+    padding-left: 1.2rem;
+    margin: 0;
+    border-left: 1px solid var(--funes-bg-hover);
+  }
+
+  li {
+    margin: var(--space-xs) 0;
+  }
+
+  summary {
+    cursor: pointer;
+    list-style: none;
+    color: var(--funes-text-main);
+    user-select: none;
+  }
+
+  summary:hover, .file-link:hover {
+    color: var(--funes-terminal);
+  }
+
+  summary::-webkit-details-marker {
+    display: none;
+  }
+
+  a {
+    color: var(--funes-text-dim);
+    text-decoration: none;
+    display: block;
+    padding: 2px 0;
+  }
+
+  a:hover {
+    color: var(--funes-text-main);
+    background-color: var(--funes-bg-hover);
+  }
+
+  .active {
+    color: var(--funes-terminal);
+    background: var(--funes-bg-hover);
+  }
+
+  .icon {
+    display: inline-block;
+    width: 1.5em;
+    text-align: center;
+    margin-right: 0.2em;
+  }
+</style>
