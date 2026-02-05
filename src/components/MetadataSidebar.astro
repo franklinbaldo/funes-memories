@@ -1,0 +1,148 @@
+---
+// components/MetadataSidebar.astro
+interface Props {
+  metadata?: Record<string, any>;
+  headings?: { depth: number; slug: string; text: string }[];
+  relatedPosts?: any[];
+}
+
+const { metadata = {}, headings = [], relatedPosts = [] } = Astro.props;
+const baseUrl = import.meta.env.BASE_URL;
+
+const safeHeadings = Array.isArray(headings) ? headings : [];
+const safeRelatedPosts = Array.isArray(relatedPosts) ? relatedPosts : [];
+---
+
+<aside class="metadata-sidebar">
+  <div class="card meta-card">
+    <div class="card-header">METADATA</div>
+    <div class="card-body">
+      {metadata.pubDate && (
+        <div class="field">
+          <span class="label">DATE:</span>
+          <span class="value">{new Date(metadata.pubDate).toISOString().split('T')[0]}</span>
+        </div>
+      )}
+      {metadata.tags && Array.isArray(metadata.tags) && (
+        <div class="field">
+          <span class="label">TAGS:</span>
+          <div class="tags">
+            {metadata.tags.map((tag: string) => (
+              <span class="tag">#{tag}</span>
+            ))}
+          </div>
+        </div>
+      )}
+      <div class="field">
+          <span class="label">TYPE:</span>
+          <span class="value">MEMORY_LOG</span>
+      </div>
+    </div>
+  </div>
+
+  {safeHeadings.length > 0 && (
+    <div class="card toc-card">
+      <div class="card-header">INDEX</div>
+      <div class="card-body">
+        <ul class="toc">
+          {safeHeadings.filter(h => h.depth <= 3).map((heading) => (
+            <li class={`depth-${heading.depth}`}>
+              <a href={`#${heading.slug}`}>{heading.text}</a>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </div>
+  )}
+
+  {safeRelatedPosts.length > 0 && (
+    <div class="card related-card">
+      <div class="card-header">RELATED_ENTRIES</div>
+      <div class="card-body">
+        <ul class="related">
+            {safeRelatedPosts.map(post => (
+                <li>
+                    <a href={`${baseUrl}blog/${post.id}/`}>{post.data.title}</a>
+                </li>
+            ))}
+        </ul>
+      </div>
+    </div>
+  )}
+</aside>
+
+<style>
+  .metadata-sidebar {
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    color: var(--funes-text-dim);
+    padding-top: var(--space-md);
+  }
+
+  .card {
+    border: 1px solid var(--funes-text-dimmer);
+    margin-bottom: var(--space-lg);
+    background: var(--funes-bg-paper);
+    box-shadow: var(--shadow-card);
+  }
+
+  .card-header {
+    background: var(--funes-bg-hover);
+    padding: var(--space-xs) var(--space-sm);
+    border-bottom: 1px solid var(--funes-text-dimmer);
+    font-weight: bold;
+    color: var(--funes-text-main);
+    letter-spacing: 1px;
+  }
+
+  .card-body {
+    padding: var(--space-sm);
+  }
+
+  .field {
+    margin-bottom: var(--space-sm);
+  }
+
+  .label {
+    display: block;
+    color: var(--funes-text-dimmer);
+    font-size: 0.8em;
+  }
+
+  .value {
+    color: var(--funes-text-main);
+  }
+
+  .tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+  }
+
+  .tag {
+    color: var(--funes-link);
+  }
+
+  ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  li {
+    margin-bottom: 4px;
+  }
+
+  a {
+    color: var(--funes-text-dim);
+    text-decoration: none;
+  }
+
+  a:hover {
+    color: var(--funes-terminal);
+    text-decoration: underline;
+  }
+
+  .depth-2 { padding-left: 0; }
+  .depth-3 { padding-left: var(--space-sm); }
+</style>

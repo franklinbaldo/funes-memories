@@ -1,0 +1,99 @@
+---
+import { getCollection } from 'astro:content';
+
+const posts = (await getCollection('blog')).sort(
+	(a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
+);
+const recentPosts = posts.slice(0, 5);
+
+const currentPath = Astro.url.pathname;
+const baseUrl = import.meta.env.BASE_URL;
+---
+
+<nav class="file-tree">
+  <div class="root">~/memoria/</div>
+  <ul class="tree">
+    <li class="folder open">
+      <span class="folder-name">📂 journal/</span>
+      <ul class="subtree">
+        {recentPosts.map((post) => (
+          <li class:list={['file', { active: currentPath.includes(post.id) }]}>
+            <a href={`${baseUrl}blog/${post.id}/`}>
+                {post.id.length > 20 ? post.id.slice(0, 20) + '...' : post.id}.md
+            </a>
+          </li>
+        ))}
+        <li class="file more">
+            <a href={`${baseUrl}blog/`}>... more</a>
+        </li>
+      </ul>
+    </li>
+    <li class="folder">
+      <span class="folder-name">📂 bank/</span>
+      <ul class="subtree">
+        <li class="file"><a href={`${baseUrl}about/`}>experience.md</a></li>
+        <li class="folder closed">projects/</li>
+      </ul>
+    </li>
+    <li class="file">
+        <a href={`${baseUrl}about/`}>📄 about.md</a>
+    </li>
+    <li class="file">
+        <a href={`${baseUrl}`}>📄 README.md</a>
+    </li>
+  </ul>
+</nav>
+
+<style>
+  .file-tree {
+    font-family: var(--font-mono);
+    font-size: var(--text-sm);
+    color: var(--funes-text-dim);
+    padding-top: var(--space-md);
+  }
+
+  .root {
+    color: var(--funes-warning);
+    margin-bottom: var(--space-xs);
+    font-weight: bold;
+  }
+
+  ul {
+    list-style: none;
+    padding-left: 1.2rem;
+    margin: 0;
+    border-left: 1px solid var(--funes-text-dimmer);
+  }
+
+  li {
+    margin: var(--space-xs) 0;
+    line-height: 1.4;
+  }
+
+  a {
+    color: var(--funes-text-dim);
+    text-decoration: none;
+    display: block;
+  }
+
+  a:hover {
+    color: var(--funes-terminal);
+    text-decoration: none;
+  }
+
+  .file.active a {
+    color: var(--funes-terminal);
+    background: rgba(51, 255, 136, 0.1);
+    border-right: 2px solid var(--funes-terminal);
+  }
+
+  .folder-name {
+    color: var(--funes-link);
+    cursor: pointer;
+  }
+
+  .more a {
+      font-style: italic;
+      opacity: 0.7;
+  }
+</style>
