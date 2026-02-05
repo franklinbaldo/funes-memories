@@ -1,0 +1,89 @@
+---
+// components/TerminalHeader.astro
+interface Props {
+  path?: string;
+  mode?: 'reading' | 'writing';
+}
+
+const { path = 'README.md', mode = 'reading' } = Astro.props;
+---
+
+<header class="terminal-header">
+  <div class="prompt">
+    <span class="user">funes@memoria</span>
+    <span class="separator">:</span>
+    <span class="path">~/{path}</span>
+    <span class="cursor">█</span>
+  </div>
+  <div class="stats">
+    <span class="stat mode">[mode: {mode}]</span>
+    <span class="stat memory">[memory: 2.4GB]</span>
+    <span class="stat uptime">[uptime: 47 days]</span>
+  </div>
+</header>
+
+<style>
+  .terminal-header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: var(--header-height);
+    background: var(--funes-bg-dark);
+    border-bottom: 1px solid var(--funes-terminal);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 var(--space-lg);
+    font-family: var(--font-mono);
+    font-size: 0.875rem; /* text-sm */
+    color: var(--funes-terminal);
+    z-index: 1000;
+  }
+
+  .prompt {
+    display: flex;
+    align-items: center;
+    gap: 0.25em;
+  }
+
+  .user {
+    color: var(--funes-terminal);
+    font-weight: 700;
+  }
+
+  .separator {
+    color: var(--funes-text-main);
+  }
+
+  .path {
+    color: var(--funes-link);
+  }
+
+  .cursor {
+    animation: blink 1s step-end infinite;
+    color: var(--funes-terminal);
+    margin-left: 0.5em;
+  }
+
+  @keyframes blink {
+    50% { opacity: 0; }
+  }
+
+  .stats {
+    display: flex;
+    gap: var(--space-md);
+    color: var(--funes-text-dim);
+  }
+
+  .stat {
+    font-size: 0.8em;
+  }
+
+  /* Hide stats on mobile */
+  @media (max-width: 768px) {
+    .stats {
+      display: none;
+    }
+  }
+</style>

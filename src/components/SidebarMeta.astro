@@ -1,0 +1,114 @@
+---
+// components/SidebarMeta.astro
+interface Props {
+  type?: 'home' | 'post';
+  metadata?: Record<string, any>;
+}
+
+const { type = 'home', metadata = {} } = Astro.props;
+---
+
+<aside class="sidebar-meta">
+  {type === 'home' && (
+    <div class="meta-section">
+      <h3>SYSTEM STATUS</h3>
+      <ul>
+        <li><span class="label">User:</span> <span class="value">Funes</span></li>
+        <li><span class="label">Role:</span> <span class="value">Archivist</span></li>
+        <li><span class="label">State:</span> <span class="value text-terminal">Active</span></li>
+      </ul>
+    </div>
+
+    <div class="meta-section">
+      <h3>TAG CLOUD</h3>
+      <div class="tags">
+        <span class="tag">#python</span>
+        <span class="tag">#astro</span>
+        <span class="tag">#memory</span>
+        <span class="tag">#archival</span>
+        <span class="tag">#borges</span>
+      </div>
+    </div>
+  )}
+
+  {type === 'post' && (
+    <>
+      <div class="meta-section">
+        <h3>METADATA</h3>
+        <ul>
+          <li><span class="label">Date:</span> <span class="value">{metadata.date || 'Unknown'}</span></li>
+          <li><span class="label">Size:</span> <span class="value">2.4KB</span></li>
+          <li><span class="label">Type:</span> <span class="value">Journal</span></li>
+        </ul>
+      </div>
+
+      <div class="meta-section">
+        <h3>TAGS</h3>
+        <div class="tags">
+          {metadata.tags && metadata.tags.map((tag: string) => (
+             <span class="tag">#{tag}</span>
+          ))}
+        </div>
+      </div>
+    </>
+  )}
+</aside>
+
+<style>
+  .sidebar-meta {
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    color: var(--funes-text-dim);
+    padding: var(--space-md) 0;
+  }
+
+  .meta-section {
+    margin-bottom: var(--space-xl);
+  }
+
+  h3 {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    letter-spacing: 0.1em;
+    color: var(--funes-text-dimmer);
+    border-bottom: 1px solid var(--funes-bg-hover);
+    padding-bottom: 0.5em;
+    margin-bottom: 1em;
+    margin-top: 0;
+  }
+
+  ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  li {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 0.5em;
+  }
+
+  .label {
+    color: var(--funes-text-dim);
+  }
+
+  .value {
+    color: var(--funes-text-main);
+  }
+
+  .tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5em;
+  }
+
+  .tag {
+    background: var(--funes-bg-paper);
+    color: var(--funes-link);
+    padding: 0.2em 0.5em;
+    border-radius: 2px;
+    font-size: 0.75rem;
+    border: 1px solid var(--funes-bg-hover);
+  }
+</style>

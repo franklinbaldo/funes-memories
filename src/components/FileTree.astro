@@ -1,0 +1,153 @@
+---
+// components/FileTree.astro
+const navStructure = [
+  {
+    name: 'memoria',
+    type: 'folder',
+    children: [
+      {
+        name: 'journal',
+        type: 'folder',
+        isOpen: true,
+        children: [
+          { name: '2026-02-05.md', type: 'file', href: '/blog/2026-02-05', active: false },
+          { name: '2026-02-04.md', type: 'file', href: '/blog/2026-02-04' },
+          { name: '2026-02-03.md', type: 'file', href: '/blog/2026-02-03' },
+        ]
+      },
+      {
+        name: 'bank',
+        type: 'folder',
+        children: [
+            { name: 'projects', type: 'folder' },
+            { name: 'experience.md', type: 'file', href: '/bank/experience' }
+        ]
+      },
+      { name: 'README.md', type: 'file', href: '/' },
+      { name: 'about.md', type: 'file', href: '/about' }
+    ]
+  }
+];
+
+const currentPath = Astro.url.pathname;
+---
+
+<nav class="file-tree">
+  <ul>
+    {navStructure.map(item => (
+      <li>
+        <span class="folder-name">~/ {item.name}/</span>
+        <ul class="tree-level-1">
+          {item.children.map(child => (
+            <li>
+              {child.type === 'folder' ? (
+                <div class="folder">
+                    <span class="icon">📂</span>
+                    <span class="name">{child.name}/</span>
+                </div>
+              ) : (
+                <a href={child.href} class:list={['file', { active: currentPath === child.href }]}>
+                    <span class="icon">📄</span>
+                    <span class="name">{child.name}</span>
+                </a>
+              )}
+
+              {child.children && (
+                <ul class="tree-level-2">
+                  {child.children.map(grandchild => (
+                    <li>
+                        {grandchild.type === 'folder' ? (
+                            <div class="folder">
+                                <span class="icon">📂</span>
+                                <span class="name">{grandchild.name}/</span>
+                            </div>
+                        ) : (
+                            <a href={grandchild.href} class:list={['file', { active: currentPath === grandchild.href }]}>
+                                <span class="icon">📄</span>
+                                <span class="name">{grandchild.name}</span>
+                            </a>
+                        )}
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </li>
+          ))}
+        </ul>
+      </li>
+    ))}
+  </ul>
+</nav>
+
+<style>
+  .file-tree {
+    font-family: var(--font-mono);
+    font-size: 0.9rem;
+    color: var(--funes-text-dim);
+    padding: var(--space-md) 0;
+  }
+
+  ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  li {
+    margin-bottom: 0.25em;
+  }
+
+  .tree-level-1 {
+    padding-left: 1.5em;
+    border-left: 1px dashed var(--funes-text-dimmer);
+    margin-left: 0.5em;
+  }
+
+  .tree-level-2 {
+    padding-left: 1.5em;
+    border-left: 1px dashed var(--funes-text-dimmer);
+    margin-left: 0.4em;
+  }
+
+  .folder {
+    color: var(--funes-text-dim);
+    padding: 0.25em 0;
+  }
+
+  .file {
+    display: block;
+    color: var(--funes-text-main);
+    padding: 0.25em 0;
+    text-decoration: none;
+    transition: color 0.1s;
+    border-radius: 4px;
+  }
+
+  .file:hover {
+    color: var(--funes-link);
+    background-color: var(--funes-bg-hover);
+  }
+
+  .file.active {
+    color: var(--funes-terminal);
+    font-weight: bold;
+    background-color: rgba(51, 255, 136, 0.1);
+  }
+
+  .file.active::before {
+    content: '> ';
+    color: var(--funes-terminal);
+  }
+
+  .icon {
+    margin-right: 0.5em;
+    opacity: 0.7;
+    filter: grayscale(1);
+    font-size: 0.9em;
+  }
+
+  .folder-name {
+    color: var(--funes-warning);
+    font-weight: bold;
+  }
+</style>

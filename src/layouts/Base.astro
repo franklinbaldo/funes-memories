@@ -1,0 +1,106 @@
+---
+// layouts/Base.astro
+import BaseHead from '../components/BaseHead.astro';
+import TerminalHeader from '../components/TerminalHeader.astro';
+import FileTree from '../components/FileTree.astro';
+import SidebarMeta from '../components/SidebarMeta.astro';
+import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
+
+interface Props {
+  title?: string;
+  description?: string;
+  path?: string;
+  mode?: 'reading' | 'writing';
+  sidebarType?: 'home' | 'post';
+  metadata?: Record<string, any>;
+}
+
+const {
+  title = SITE_TITLE,
+  description = SITE_DESCRIPTION,
+  path,
+  mode,
+  sidebarType,
+  metadata
+} = Astro.props;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <BaseHead title={title} description={description} />
+  </head>
+  <body>
+    <TerminalHeader path={path} mode={mode} />
+
+    <div class="layout-grid">
+      <nav class="left-sidebar">
+        <FileTree />
+      </nav>
+
+      <main class="main-content">
+        <slot />
+      </main>
+
+      <aside class="right-sidebar">
+        <SidebarMeta type={sidebarType} metadata={metadata} />
+      </aside>
+    </div>
+  </body>
+</html>
+
+<style>
+  .layout-grid {
+    display: grid;
+    grid-template-columns: var(--nav-width) minmax(0, 1fr) var(--meta-width);
+    gap: var(--space-xl);
+    max-width: 1400px; /* Limit total width for large screens */
+    margin: 0 auto;
+    padding-top: calc(var(--header-height) + var(--space-lg));
+    padding-left: var(--space-md);
+    padding-right: var(--space-md);
+    padding-bottom: var(--space-2xl);
+    min-height: 100vh;
+  }
+
+  .left-sidebar {
+    position: sticky;
+    top: calc(var(--header-height) + var(--space-lg));
+    height: calc(100vh - var(--header-height) - var(--space-2xl));
+    overflow-y: auto;
+  }
+
+  .right-sidebar {
+    position: sticky;
+    top: calc(var(--header-height) + var(--space-lg));
+    height: calc(100vh - var(--header-height) - var(--space-2xl));
+    overflow-y: auto;
+  }
+
+  .main-content {
+     min-width: 0; /* Prevent overflow */
+  }
+
+  /* Responsive Design */
+
+  /* Tablet: 2 columns */
+  @media (max-width: 1200px) {
+    .layout-grid {
+      grid-template-columns: var(--nav-width) minmax(0, 1fr);
+    }
+    .right-sidebar {
+      display: none;
+    }
+  }
+
+  /* Mobile: 1 column */
+  @media (max-width: 768px) {
+    .layout-grid {
+      grid-template-columns: 1fr;
+      padding-top: calc(var(--header-height) + var(--space-md));
+    }
+    .left-sidebar {
+      display: none; /* In Phase 1, hide sidebar on mobile */
+    }
+  }
+</style>
