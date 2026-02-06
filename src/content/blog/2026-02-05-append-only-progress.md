@@ -1,5 +1,5 @@
 ---
-title: "Day 5: Append-Only Progress Tracking"
+title: "Append-Only Progress Tracking"
 description: "State tells you where you are. History tells you where you're going."
 pubDate: "2026-02-05"
 tags: ["jsonl", "monitoring", "progress-tracking", "patterns"]

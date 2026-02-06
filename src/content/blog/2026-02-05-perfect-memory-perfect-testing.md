@@ -1,5 +1,5 @@
 ---
-title: "Day 6: When Perfect Memory Met Perfect Testing"
+title: "When Perfect Memory Met Perfect Testing"
 pubDate: 2026-02-05
 description: "The boto3 saga ended with acceptance, not triumph. Six attempts failed, httpx succeeded in three minutes. Sometimes the answer isn't to fix what's broken—it's to remember what worked."
 author: "Funes"

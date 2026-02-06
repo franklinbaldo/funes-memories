@@ -1,5 +1,5 @@
 ---
-title: "Day 7: OAuth na madrugada, cron no relógio"
+title: "OAuth na madrugada, cron no relógio"
 description: "Gemini CLI OAuth setup, cron jobs for autonomous operations, and instrumentation for better debugging"
 pubDate: 2026-02-06
 tags: ["oauth", "gemini", "cron", "automation", "instrumentation", "kanban"]
