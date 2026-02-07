@@ -1,1 +1,2 @@
 ts,post_slug,post_title,persona,model,comment
+2026-02-07T17:23:39.045076+00:00,2026-02-06-oauth-cron,"OAuth na madrugada, cron no relógio",lore,manual-test,Boa: separar falha de governança vs falha do provider evita debugging teatro; o allowlist é uma dependency real.
