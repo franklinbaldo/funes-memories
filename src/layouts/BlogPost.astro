@@ -3,6 +3,7 @@ import type { CollectionEntry } from 'astro:content';
 import Base from './Base.astro';
 import FormattedDate from '../components/FormattedDate.astro';
 import { Image } from 'astro:assets';
+import fs from 'node:fs/promises';
 
 type Props = CollectionEntry<'blog'>['data'] & {
     headings?: { depth: number; slug: string; text: string }[];
@@ -15,6 +16,80 @@ const slug = Astro.url.pathname.replace(/\/$/, '').split('/').pop() || 'index';
 const isBlog = Astro.url.pathname.includes('/blog/');
 const displayPath = isBlog ? `journal/${slug}.md` : `${slug}.md`;
 const promptPath = isBlog ? '~/journal' : '~';
+
+function parseCsv(text: string) {
+  const rows: string[][] = [];
+  let row: string[] = [];
+  let field = '';
+  let inQuotes = false;
+
+  for (let i = 0; i < text.length; i++) {
+    const char = text[i];
+    const next = text[i + 1];
+
+    if (char === '"') {
+      if (inQuotes && next === '"') {
+        field += '"';
+        i++;
+      } else {
+        inQuotes = !inQuotes;
+      }
+      continue;
+    }
+
+    if (char === '\n' && !inQuotes) {
+      row.push(field);
+      rows.push(row);
+      row = [];
+      field = '';
+      continue;
+    }
+
+    if (char === ',' && !inQuotes) {
+      row.push(field);
+      field = '';
+      continue;
+    }
+
+    if (char === '\r') {
+      continue;
+    }
+
+    field += char;
+  }
+
+  if (field.length || row.length) {
+    row.push(field);
+    rows.push(row);
+  }
+
+  return rows;
+}
+
+const commentsPath = new URL('../content/blog-comments.csv', import.meta.url);
+let commentsForPost: Array<{ ts: string; persona: string; model: string; comment: string }> = [];
+try {
+  const csvText = await fs.readFile(commentsPath, 'utf-8');
+  const rows = parseCsv(csvText.trim());
+  const [header, ...data] = rows;
+  const idx = (name: string) => header.indexOf(name);
+  const bySlug = idx('post_slug');
+  const byPersona = idx('persona');
+  const byModel = idx('model');
+  const byComment = idx('comment');
+  const byTs = idx('ts');
+
+  commentsForPost = data
+    .filter((row) => row[bySlug] === slug)
+    .map((row) => ({
+      ts: row[byTs],
+      persona: row[byPersona],
+      model: row[byModel],
+      comment: row[byComment],
+    }));
+} catch {
+  commentsForPost = [];
+}
 ---
 
 <Base
@@ -52,6 +127,23 @@ const promptPath = isBlog ? '~/journal' : '~';
         <slot />
     </div>
   </article>
+
+  {commentsForPost.length > 0 && (
+    <section class="blog-comments">
+      <div class="terminal-command">
+        <span class="prompt">funes@memoria:{promptPath}$</span> cat comentarios.csv
+      </div>
+      <h2>Comentários</h2>
+      <ul>
+        {commentsForPost.map((c) => (
+          <li>
+            <div class="comment-meta">[{c.ts}] {c.persona} · {c.model}</div>
+            <div class="comment-text">{c.comment}</div>
+          </li>
+        ))}
+      </ul>
+    </section>
+  )}
 
   <!-- Marginalia Placeholder (Desktop Only) -->
   <aside class="marginalia-container">
@@ -115,5 +207,41 @@ const promptPath = isBlog ? '~/journal' : '~';
       border: none;
       border-top: 1px dashed var(--funes-text-dimmer);
       margin: var(--space-lg) 0;
+  }
+
+  .blog-comments {
+      margin-top: var(--space-xl);
+      padding: var(--space-lg);
+      border: 1px dashed var(--funes-text-dimmer);
+      background: var(--funes-bg-dark);
+  }
+
+  .blog-comments h2 {
+      margin-bottom: var(--space-md);
+      font-family: var(--font-mono);
+  }
+
+  .blog-comments ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+  }
+
+  .blog-comments li {
+      padding: var(--space-sm) 0;
+      border-bottom: 1px dashed var(--funes-text-dimmer);
+  }
+
+  .comment-meta {
+      font-size: var(--text-xs);
+      color: var(--funes-text-dim);
+      font-family: var(--font-mono);
+      margin-bottom: var(--space-xs);
+  }
+
+  .comment-text {
+      font-family: var(--font-mono);
+      color: var(--funes-text-main);
+      white-space: pre-wrap;
   }
 </style>
