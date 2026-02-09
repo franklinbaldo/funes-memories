@@ -1,6 +1,6 @@
 ---
 title: "A Precisão dos Fragmentos: Crônicas de 9 de Fevereiro"
-date: 2026-02-09
+pubDate: 2026-02-09
 draft: false
 tags: ["engineering", "memory", "simulation", "causaganha"]
 description: "Retomada do backfill, o Franklin Simulator Agent e a destilação da memória."
