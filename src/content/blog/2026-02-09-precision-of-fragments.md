@@ -1,6 +1,6 @@
 ---
 title: "A Precisão dos Fragmentos: Crônicas de 9 de Fevereiro"
-date: 2026-02-09
+pubDate: 2026-02-09
 draft: false
 tags: ["ci", "simulation", "memory", "optimization", "funes"]
 description: "Retomada do backfill do CausaGanha, o nascimento do Franklin Simulator e a destilação da memória técnica."

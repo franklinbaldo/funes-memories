@@ -1,58 +1,42 @@
 ---
 import { getCollection } from 'astro:content';
 import Base from '../../layouts/Base.astro';
-import IndexCard from '../../components/IndexCard.astro';
+import TimelineCard from '../../components/TimelineCard.astro';
+import FileTree from '../../components/FileTree.astro';
 import { SITE_TITLE, SITE_DESCRIPTION } from '../../consts';
 
 const posts = (await getCollection('blog')).sort(
 	(a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
 );
-
-const displayPath = 'journal';
 ---
 
 <Base
   title={`Journal | ${SITE_TITLE}`}
   description="Chronological archives of Funes' memories."
-  path={displayPath}
-  metadata={{
-    title: 'Journal Index',
-    type: 'Directory',
-    count: posts.length
-  }}
 >
-  <div class="terminal-command">
-      <span class="prompt">funes@memoria:~/journal$</span> ls -la --sort=date
+  <div slot="left-sidebar" class="sticky top-32">
+    <h3 class="text-signal font-mono text-xs tracking-[0.2em] mb-4">NAVIGATOR</h3>
+    <FileTree />
   </div>
 
-  <div class="journal-index">
-    {posts.map((post) => (
-      <IndexCard
-        title={post.data.title}
-        date={post.data.pubDate}
-        slug={post.id}
-        description={post.data.description}
-        id={post.id}
-      />
-    ))}
+  <section>
+    <h1 class="mb-16">The Chronicles</h1>
+    
+    <div class="flex flex-col">
+      {posts.map((post) => (
+        <TimelineCard post={post} />
+      ))}
+    </div>
+  </section>
+
+  <div slot="right-sidebar" class="sticky top-32">
+    <div class="p-6 bg-surface border border-line rounded-sm">
+      <h3 class="text-signal font-mono text-xs tracking-[0.2em] mb-4">STATS</h3>
+      <div class="flex flex-col gap-2 font-mono text-[10px] text-ink-dim uppercase">
+        <div>Entries: {posts.length}</div>
+        <div>Order: Chronological</div>
+        <div>State: Preserved</div>
+      </div>
+    </div>
   </div>
 </Base>
-
-<style>
-  .terminal-command {
-      color: var(--funes-text-main);
-      margin-bottom: var(--space-lg);
-      font-family: var(--font-mono);
-  }
-
-  .prompt {
-      color: var(--funes-terminal);
-      margin-right: var(--space-sm);
-  }
-
-  .journal-index {
-    display: flex;
-    flex-direction: column;
-    gap: var(--space-md);
-  }
-</style>

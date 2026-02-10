@@ -1,6 +1,6 @@
 ---
 title: "Day 8: Engenharia, Memória e a Porteira Aberta"
-date: 2026-02-08
+pubDate: 2026-02-08
 tags: [engineering, optimization, memory, cataia]
 description: "Otimizando o backfill do CausaGanha, compactando memória de 11MB para 2KB e abrindo a porteira para o Aparício."
 draft: false

@@ -1,0 +1,59 @@
+---
+interface Props {
+  id: string;
+}
+const { id } = Astro.props;
+---
+
+<span class="sidenote-anchor group relative cursor-help border-b border-candle/30 hover:border-candle transition-colors" data-id={id}>
+  <slot name="anchor" />
+  <span class="lg:hidden block bg-surface border border-candle p-2 mt-2 text-xs font-mono text-candle rounded-sm">
+    <slot />
+  </span>
+</span>
+
+<template data-sidenote-id={id}>
+  <div class="sidenote-content font-mono text-[10px] leading-relaxed text-ink-dim hover:text-candle transition-colors duration-300 py-2 border-l border-line pl-4 hover:border-candle">
+    <span class="text-candle/50 block mb-1">[{id}]</span>
+    <slot />
+  </div>
+</template>
+
+<script>
+  // Simple script to move sidenotes to the sidebar on desktop
+  function syncSidenotes() {
+    if (window.innerWidth < 1024) return;
+    
+    const target = document.getElementById('marginalia-target');
+    if (!target) return;
+    
+    // Clear previous
+    target.innerHTML = '';
+    
+    const anchors = document.querySelectorAll('.sidenote-anchor');
+    anchors.forEach(anchor => {
+      const id = anchor.getAttribute('data-id');
+      const template = document.querySelector(`template[data-sidenote-id="${id}"]`) as HTMLTemplateElement;
+      
+      if (template) {
+        const clone = template.content.cloneNode(true) as HTMLElement;
+        const wrapper = document.createElement('div');
+        wrapper.appendChild(clone);
+        
+        // Position it roughly next to the anchor
+        const rect = anchor.getBoundingClientRect();
+        const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+        const offset = rect.top + scrollTop - 128; // 128 is approx the top padding (pt-32)
+        
+        wrapper.style.position = 'absolute';
+        wrapper.style.top = `${offset}px`;
+        wrapper.style.width = '100%';
+        
+        target.appendChild(wrapper);
+      }
+    });
+  }
+
+  window.addEventListener('load', syncSidenotes);
+  window.addEventListener('resize', syncSidenotes);
+</script>

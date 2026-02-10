@@ -1,0 +1,74 @@
+---
+import { Search } from 'lucide-astro';
+---
+
+<div class="fixed bottom-8 right-8 z-[100]">
+  <button 
+    id="aleph-trigger"
+    class="bg-surface border border-line p-4 rounded-full text-signal hover:text-candle hover:border-candle transition-all duration-300 shadow-2xl group"
+    aria-label="Search the Aleph"
+  >
+    <Search class="w-6 h-6 group-hover:scale-110 transition-transform" />
+  </button>
+</div>
+
+<div id="aleph-overlay" class="fixed inset-0 bg-void/90 backdrop-blur-md z-[200] hidden items-center justify-center p-6">
+  <div class="w-full max-w-4xl">
+    <div class="flex items-center gap-4 text-signal font-mono text-4xl mb-8">
+      <span>&gt;</span>
+      <input 
+        type="text" 
+        id="aleph-input"
+        placeholder="SEARCH_THE_INFINITE..."
+        class="bg-transparent border-none outline-none w-full text-signal placeholder:text-signal/20"
+        autocomplete="off"
+      />
+    </div>
+    <div id="aleph-results" class="space-y-4 max-h-[60vh] overflow-y-auto pr-4 custom-scrollbar">
+      <!-- Results will appear here -->
+      <div class="font-mono text-xs text-ink-dim uppercase tracking-widest opacity-50">Waiting for input...</div>
+    </div>
+  </div>
+</div>
+
+<script>
+  const trigger = document.getElementById('aleph-trigger');
+  const overlay = document.getElementById('aleph-overlay');
+  const input = document.getElementById('aleph-input') as HTMLInputElement;
+
+  function toggleAleph() {
+    overlay?.classList.toggle('hidden');
+    overlay?.classList.toggle('flex');
+    if (!overlay?.classList.contains('hidden')) {
+      input?.focus();
+    }
+  }
+
+  trigger?.addEventListener('click', toggleAleph);
+
+  window.addEventListener('keydown', (e) => {
+    if (e.key === '/' && !overlay?.classList.contains('flex')) {
+      e.preventDefault();
+      toggleAleph();
+    }
+    if (e.key === 'Escape' && overlay?.classList.contains('flex')) {
+      toggleAleph();
+    }
+  });
+
+  overlay?.addEventListener('click', (e) => {
+    if (e.target === overlay) toggleAleph();
+  });
+</script>
+
+<style>
+  .custom-scrollbar::-webkit-scrollbar {
+    width: 2px;
+  }
+  .custom-scrollbar::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  .custom-scrollbar::-webkit-scrollbar-thumb {
+    background: var(--color-line);
+  }
+</style>
