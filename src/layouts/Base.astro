@@ -1,8 +1,11 @@
 ---
 import BaseHead from '../components/BaseHead.astro';
-import FileTree from '../components/FileTree.astro';
-import MetadataSidebar from '../components/MetadataSidebar.astro';
-import TerminalHeader from '../components/TerminalHeader.astro';
+import TheAleph from '../components/TheAleph.astro';
+import '@fontsource/eb-garamond/400.css';
+import '@fontsource/eb-garamond/500.css';
+import '@fontsource/eb-garamond/600.css';
+import '@fontsource/jetbrains-mono/400.css';
+import '../styles/global.css';
 import { SITE_DESCRIPTION, SITE_TITLE } from '../consts';
 
 interface Props {
@@ -35,80 +38,29 @@ const {
   <head>
     <BaseHead title={title} description={description} image={image} />
   </head>
-  <body>
-    <TerminalHeader path={path} mode={mode} />
-
-    <div class="layout-grid">
-      <aside class="sidebar-left">
-        <FileTree />
-      </aside>
-
-      <main class="content">
-        <slot />
-      </main>
-
-      {!hideRightSidebar && (
-        <aside class="sidebar-right">
-          <slot name="metadata">
-            <MetadataSidebar metadata={metadata} headings={headings} relatedPosts={relatedPosts} />
-          </slot>
+  <body class="bg-void text-ink selection:bg-candle/30 selection:text-candle">
+    <div class="texture-grain"></div>
+    <TheAleph />
+    
+    <div class="mx-auto max-w-[1440px] px-6">
+      <div class="grid grid-cols-12 gap-x-8">
+        
+        <!-- Left Column: Timeline / Meta -->
+        <aside class="col-span-12 lg:col-span-2 pt-12 lg:pt-32">
+          <slot name="left-sidebar" />
         </aside>
-      )}
+
+        <!-- Main Content -->
+        <main class="col-span-12 lg:col-span-7 pt-12 lg:pt-32 pb-32">
+          <slot />
+        </main>
+
+        <!-- Right Column: Marginalia -->
+        <aside class="col-span-12 lg:col-span-3 pt-12 lg:pt-32 relative">
+          <slot name="right-sidebar" />
+        </aside>
+
+      </div>
     </div>
   </body>
 </html>
-
-<style>
-  .layout-grid {
-    display: grid;
-    grid-template-columns: var(--nav-width) 1fr var(--meta-width);
-    gap: var(--space-lg);
-    max-width: 1600px; /* Cap width for ultra-wide screens */
-    margin: 0 auto;
-    padding-top: calc(var(--header-height) + var(--space-lg));
-    padding-left: var(--space-md);
-    padding-right: var(--space-md);
-    min-height: 100vh;
-  }
-
-  .sidebar-left {
-    position: sticky;
-    top: calc(var(--header-height) + var(--space-lg));
-    height: calc(100vh - var(--header-height) - var(--space-2xl));
-    overflow-y: auto;
-  }
-
-  .sidebar-right {
-    position: sticky;
-    top: calc(var(--header-height) + var(--space-lg));
-    height: calc(100vh - var(--header-height) - var(--space-2xl));
-    overflow-y: auto;
-  }
-
-  .content {
-    min-width: 0; /* Prevent flex/grid overflow */
-  }
-
-  /* Responsive Design */
-  @media (max-width: 1200px) {
-    .layout-grid {
-      grid-template-columns: var(--nav-width) 1fr;
-    }
-
-    .sidebar-right {
-      display: none;
-    }
-  }
-
-  @media (max-width: 768px) {
-    .layout-grid {
-      grid-template-columns: 1fr;
-      padding-left: var(--space-sm);
-      padding-right: var(--space-sm);
-    }
-
-    .sidebar-left {
-      display: none; /* In a real implementation, this would be a slide-over drawer */
-    }
-  }
-</style>

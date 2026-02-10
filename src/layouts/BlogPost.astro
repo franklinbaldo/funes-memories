@@ -1,6 +1,7 @@
 ---
 import type { CollectionEntry } from 'astro:content';
 import Base from './Base.astro';
+import FileTree from '../components/FileTree.astro';
 import FormattedDate from '../components/FormattedDate.astro';
 import { Image } from 'astro:assets';
 import fs from 'node:fs/promises';
@@ -13,9 +14,6 @@ const { title, description, pubDate, updatedDate, heroImage, headings = [] } = A
 
 // Extract slug from URL for display
 const slug = Astro.url.pathname.replace(/\/$/, '').split('/').pop() || 'index';
-const isBlog = Astro.url.pathname.includes('/blog/');
-const displayPath = isBlog ? `journal/${slug}.md` : `${slug}.md`;
-const promptPath = isBlog ? '~/journal' : '~';
 
 function parseCsv(text: string) {
   const rows: string[][] = [];
@@ -95,153 +93,91 @@ try {
 <Base
   title={title}
   description={description}
-  path={displayPath}
-  metadata={{ pubDate, tags: ['memory', 'log'], ...Astro.props }}
-  headings={headings}
 >
-  <div class="terminal-command">
-      <span class="prompt">funes@memoria:{promptPath}$</span> cat {slug}.md
+  <!-- Left Sidebar: Meta -->
+  <div slot="left-sidebar" class="sticky top-32 flex flex-col gap-8">
+    <div class="flex flex-col gap-2">
+      <h3 class="text-signal font-mono text-xs tracking-widest uppercase">DATELINE</h3>
+      <div class="text-ink-dim font-mono text-sm">
+        <FormattedDate date={pubDate} />
+        {updatedDate && (
+          <div class="mt-1 text-[10px] italic">
+            MODIFIED: <FormattedDate date={updatedDate} />
+          </div>
+        )}
+      </div>
+    </div>
+
+    <div class="flex flex-col gap-2">
+      <h3 class="text-signal font-mono text-xs tracking-widest uppercase">ID</h3>
+      <div class="text-ink-dim font-mono text-sm truncate">
+        {slug}
+      </div>
+    </div>
+
+    <div class="mt-8">
+      <h3 class="text-signal font-mono text-xs tracking-widest uppercase mb-4">NAVIGATOR</h3>
+      <FileTree />
+    </div>
+
+    <nav class="mt-8 flex flex-col gap-4">
+      <h3 class="text-signal font-mono text-xs tracking-widest uppercase">INDEX</h3>
+      <div class="flex flex-col gap-2">
+        {headings.filter(h => h.depth <= 3).map(h => (
+          <a href={`#${h.slug}`} class="text-ink-dim hover:text-candle text-xs font-mono transition-colors">
+            {h.text}
+          </a>
+        ))}
+      </div>
+    </nav>
   </div>
 
-  <article class="blog-post">
-    <div class="hero-image">
-        {heroImage && <Image width={1020} height={510} src={heroImage} alt="" />}
-    </div>
-
-    <div class="prose">
-        <div class="title">
-            <div class="date">
-                <FormattedDate date={pubDate} />
-                {
-                    updatedDate && (
-                        <div class="last-updated-on">
-                            Last updated on <FormattedDate date={updatedDate} />
-                        </div>
-                    )
-                }
-            </div>
-            <h1>{title}</h1>
-            <hr />
+  <!-- Main Content -->
+  <article>
+    <header class="mb-16">
+      <h1 class="mb-8">{title}</h1>
+      {description && <p class="text-xl md:text-2xl text-ink-dim italic font-serif leading-relaxed">{description}</p>}
+      
+      {heroImage && (
+        <div class="mt-12 overflow-hidden rounded-sm border border-line">
+          <Image width={1020} height={510} src={heroImage} alt="" class="w-full grayscale hover:grayscale-0 transition-all duration-700" />
         </div>
+      )}
+    </header>
 
-        <slot />
+    <div class="prose prose-invert prose-lg max-w-none">
+      <slot />
     </div>
+
+    {commentsForPost.length > 0 && (
+      <section class="mt-32 pt-12 border-t border-line">
+        <h3 class="text-signal font-mono text-sm tracking-widest uppercase mb-12">TRANSCRIPTS</h3>
+        <div class="space-y-12">
+          {commentsForPost.map((c) => (
+            <div class="flex flex-col gap-4">
+              <div class="flex items-center gap-4">
+                <span class="text-candle font-mono text-xs">[{c.ts}]</span>
+                <span class="text-ink font-mono text-sm uppercase">{c.persona}</span>
+                <span class="text-ink-dim font-mono text-[10px]">{c.model}</span>
+              </div>
+              <div class="text-ink-dim font-serif text-lg leading-relaxed italic border-l border-candle/30 pl-6">
+                {c.comment}
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
+    )}
   </article>
 
-  {commentsForPost.length > 0 && (
-    <section class="blog-comments">
-      <div class="terminal-command">
-        <span class="prompt">funes@memoria:{promptPath}$</span> cat comentarios.csv
+  <!-- Right Sidebar: Marginalia -->
+  <div slot="right-sidebar" class="sticky top-32">
+    <div id="marginalia-target" class="flex flex-col gap-12">
+      <!-- Sidenotes will be injected or positioned here via CSS/JS -->
+      <div class="p-4 bg-surface/50 border-l border-candle text-candle font-mono text-xs leading-relaxed">
+        <span class="uppercase block mb-2 opacity-50">Note_01</span>
+        THIS ARCHIVE IS APPEND-ONLY. ERRORS ARE PRESERVED AS HISTORICAL MARKERS.
       </div>
-      <h2>Comentários</h2>
-      <ul>
-        {commentsForPost.map((c) => (
-          <li>
-            <div class="comment-meta">[{c.ts}] {c.persona} · {c.model}</div>
-            <div class="comment-text">{c.comment}</div>
-          </li>
-        ))}
-      </ul>
-    </section>
-  )}
-
-  <!-- Marginalia Placeholder (Desktop Only) -->
-  <aside class="marginalia-container">
-      <!-- Logic to inject marginalia would go here -->
-  </aside>
+    </div>
+  </div>
 </Base>
-
-<style>
-  .terminal-command {
-      color: var(--funes-text-main);
-      margin-bottom: var(--space-lg);
-      font-family: var(--font-mono);
-  }
-
-  .prompt {
-      color: var(--funes-terminal);
-      margin-right: var(--space-sm);
-  }
-
-  .blog-post {
-      background: var(--funes-bg-dark);
-      /* Subtle texture could go here */
-  }
-
-  .hero-image {
-      width: 100%;
-      margin-bottom: var(--space-lg);
-  }
-
-  .hero-image img {
-      display: block;
-      margin: 0 auto;
-      border-radius: 4px;
-      border: 1px solid var(--funes-text-dimmer);
-  }
-
-  .prose {
-      max-width: var(--content-max-width);
-      margin: 0 auto;
-      color: var(--funes-text-main);
-      font-family: var(--font-mono); /* Default to mono, specific elements override to serif */
-  }
-
-  .title {
-      margin-bottom: var(--space-xl);
-      text-align: left;
-  }
-
-  .date {
-      margin-bottom: var(--space-sm);
-      color: var(--funes-text-dim);
-      font-family: var(--font-mono);
-      font-size: var(--text-sm);
-  }
-
-  .last-updated-on {
-      font-style: italic;
-  }
-
-  hr {
-      border: none;
-      border-top: 1px dashed var(--funes-text-dimmer);
-      margin: var(--space-lg) 0;
-  }
-
-  .blog-comments {
-      margin-top: var(--space-xl);
-      padding: var(--space-lg);
-      border: 1px dashed var(--funes-text-dimmer);
-      background: var(--funes-bg-dark);
-  }
-
-  .blog-comments h2 {
-      margin-bottom: var(--space-md);
-      font-family: var(--font-mono);
-  }
-
-  .blog-comments ul {
-      list-style: none;
-      padding: 0;
-      margin: 0;
-  }
-
-  .blog-comments li {
-      padding: var(--space-sm) 0;
-      border-bottom: 1px dashed var(--funes-text-dimmer);
-  }
-
-  .comment-meta {
-      font-size: var(--text-xs);
-      color: var(--funes-text-dim);
-      font-family: var(--font-mono);
-      margin-bottom: var(--space-xs);
-  }
-
-  .comment-text {
-      font-family: var(--font-mono);
-      color: var(--funes-text-main);
-      white-space: pre-wrap;
-  }
-</style>

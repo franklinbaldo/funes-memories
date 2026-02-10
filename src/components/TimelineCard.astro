@@ -1,0 +1,34 @@
+---
+import { getCollection } from 'astro:content';
+import FormattedDate from './FormattedDate.astro';
+
+const { post } = Astro.props;
+const baseUrlRaw = import.meta.env.BASE_URL || '/';
+const baseUrl = baseUrlRaw.endsWith('/') ? baseUrlRaw : `${baseUrlRaw}/`;
+---
+
+<div class="timeline-card group relative pl-8 pb-12">
+  <!-- The Line -->
+  <div class="timeline-line"></div>
+  
+  <!-- The Marker -->
+  <div class="timeline-marker"></div>
+
+  <div class="flex flex-col gap-1 transition-transform duration-300 group-hover:translate-x-2">
+    <span class="font-mono text-xs text-ink-dim uppercase tracking-widest">
+      <FormattedDate date={post.data.pubDate} />
+    </span>
+    
+    <a href={`${baseUrl}blog/${post.id}/`} class="group-hover:text-candle">
+      <h3 class="font-serif text-2xl md:text-3xl text-ink leading-tight transition-colors !normal-case !tracking-normal">
+        {post.data.title}
+      </h3>
+    </a>
+
+    {post.data.description && (
+      <p class="mt-2 text-ink-dim text-sm md:text-base line-clamp-2 max-w-[50ch]">
+        {post.data.description}
+      </p>
+    )}
+  </div>
+</div>
