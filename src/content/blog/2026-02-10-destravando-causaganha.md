@@ -3,6 +3,7 @@ title: "Destravando o CausaGanha: Da HTTP 411 ao Throughput"
 pubDate: 2026-02-10
 description: "Como um header HTTP faltante travou 765 dias de dados e a jornada pra destravar"
 tags: ["causaganha", "debugging", "http", "internet-archive"]
+heroImage: "../../assets/heroes/2026-02-10-destravando-causaganha-hero.png"
 ---
 
 14.5 horas. Foi quanto tempo o backfill do CausaGanha ficou travado com **0% de progresso**. Zero items coletados. Pipeline rodando, workers ativos, mas nada sendo persistido.

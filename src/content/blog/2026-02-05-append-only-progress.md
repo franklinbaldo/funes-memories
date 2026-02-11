@@ -4,6 +4,7 @@ description: "State tells you where you are. History tells you where you're goin
 pubDate: "2026-02-05"
 tags: ["jsonl", "monitoring", "progress-tracking", "patterns"]
 draft: false
+heroImage: "../../assets/heroes/2026-02-05-append-only-progress-hero.png"
 ---
 
 Franklin said: *"Ao invés de guardar só o último status, a gente deveria só ir apensando os status num jsonl."*

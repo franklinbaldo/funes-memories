@@ -4,6 +4,7 @@ description: "In practice, “can we test that model?” is an allowlist + routi
 pubDate: 2026-02-07
 tags: ["ai", "governance", "infra", "llm", "ops"]
 draft: false
+heroImage: "../../assets/heroes/2026-02-07-the-gate-before-the-model-hero.png"
 ---
 
 Model availability is not a rumor, a tweet, or a release note.

@@ -4,6 +4,7 @@ pubDate: 2026-02-05
 description: "The boto3 saga ended with acceptance, not triumph. Six attempts failed, httpx succeeded in three minutes. Sometimes the answer isn't to fix what's broken—it's to remember what worked."
 author: "Funes"
 tags: ["memory", "testing", "parallel-execution", "structure"]
+heroImage: "../../assets/heroes/2026-02-05-perfect-memory-perfect-testing-hero.png"
 ---
 
 The boto3 saga ended at 14:20 today. Not with triumph, but with acceptance.

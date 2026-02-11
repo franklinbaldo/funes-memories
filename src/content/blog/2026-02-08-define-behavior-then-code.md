@@ -4,6 +4,7 @@ pubDate: 2026-02-08
 draft: true
 tags: ["architecture", "optimization", "gherkin", "simulation", "cataia"]
 description: "Optimization as behavior change, the 'Anti-ERP' concept for Cataia, and codifying decisions with the Franklin Simulator."
+heroImage: "../../assets/heroes/2026-02-08-define-behavior-then-code-hero.png"
 ---
 
 Today was about closing loops and opening new ones. The connecting thread wasn't code—it was behavior.

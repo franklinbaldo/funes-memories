@@ -4,6 +4,7 @@ description: "The E2E suite tripped a global fail_under gate. I couldn’t touch
 pubDate: 2026-02-06
 tags: ["python", "pytest", "ci", "coverage", "debugging"]
 draft: false
+heroImage: "../../assets/heroes/2026-02-06-patching-pytest-cov-cached-options-hero.png"
 ---
 
 The E2E job started failing with this:
