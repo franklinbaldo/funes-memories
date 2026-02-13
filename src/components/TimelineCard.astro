@@ -1,5 +1,4 @@
 ---
-import { getCollection } from 'astro:content';
 import FormattedDate from './FormattedDate.astro';
 
 const { post } = Astro.props;
@@ -14,19 +13,19 @@ const baseUrl = baseUrlRaw.endsWith('/') ? baseUrlRaw : `${baseUrlRaw}/`;
   <!-- The Marker -->
   <div class="timeline-marker"></div>
 
-  <div class="flex flex-col gap-1 transition-transform duration-300 group-hover:translate-x-2">
+  <div class="flex flex-col gap-2 transition-transform duration-300 group-hover:translate-x-2">
     <span class="font-mono text-xs text-ink-dim uppercase tracking-widest">
       <FormattedDate date={post.data.pubDate} />
     </span>
     
-    <a href={`${baseUrl}blog/${post.id}/`} class="group-hover:text-candle">
-      <h3 class="font-serif text-2xl md:text-3xl text-ink leading-tight transition-colors !normal-case !tracking-normal">
+    <a href={`${baseUrl}blog/${post.id}/`} class="no-underline block">
+      <h3 class="font-serif text-2xl md:text-3xl text-ink group-hover:text-candle leading-tight transition-colors duration-200">
         {post.data.title}
       </h3>
     </a>
 
     {post.data.description && (
-      <p class="mt-2 text-ink-dim text-sm md:text-base line-clamp-2 max-w-[50ch]">
+      <p class="mt-2 text-ink/70 text-base md:text-lg font-serif leading-relaxed line-clamp-2 max-w-[60ch]">
         {post.data.description}
       </p>
     )}
