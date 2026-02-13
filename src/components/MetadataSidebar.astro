@@ -1,5 +1,4 @@
 ---
-// components/MetadataSidebar.astro
 interface Props {
   metadata?: Record<string, any>;
   headings?: { depth: number; slug: string; text: string }[];
@@ -14,41 +13,52 @@ const safeHeadings = Array.isArray(headings) ? headings : [];
 const safeRelatedPosts = Array.isArray(relatedPosts) ? relatedPosts : [];
 ---
 
-<aside class="metadata-sidebar">
-  <div class="card meta-card">
-    <div class="card-header">METADATA</div>
-    <div class="card-body">
+<aside class="flex flex-col gap-8 pt-6 font-mono text-xs text-ink-dim w-full">
+
+  <!-- Metadata Card -->
+  <div class="bg-surface border border-line shadow-sm">
+    <div class="bg-white/5 border-b border-line px-4 py-2 font-bold text-ink tracking-widest uppercase flex items-center gap-2">
+      <span class="text-signal">::</span> METADATA
+    </div>
+    <div class="p-4 space-y-3">
       {metadata.pubDate && (
-        <div class="field">
-          <span class="label">DATE:</span>
-          <span class="value">{new Date(metadata.pubDate).toISOString().split('T')[0]}</span>
+        <div class="flex flex-col gap-1">
+          <span class="text-ink-dim/60 text-[10px] uppercase tracking-wider">DATE_LOGGED</span>
+          <span class="text-ink">{new Date(metadata.pubDate).toISOString().split('T')[0]}</span>
         </div>
       )}
+
       {metadata.tags && Array.isArray(metadata.tags) && (
-        <div class="field">
-          <span class="label">TAGS:</span>
-          <div class="tags">
+        <div class="flex flex-col gap-1">
+          <span class="text-ink-dim/60 text-[10px] uppercase tracking-wider">TAGS</span>
+          <div class="flex flex-wrap gap-2">
             {metadata.tags.map((tag: string) => (
-              <span class="tag">#{tag}</span>
+              <span class="text-link hover:text-candle cursor-pointer transition-colors">#{tag}</span>
             ))}
           </div>
         </div>
       )}
-      <div class="field">
-          <span class="label">TYPE:</span>
-          <span class="value">MEMORY_LOG</span>
+
+      <div class="flex flex-col gap-1">
+          <span class="text-ink-dim/60 text-[10px] uppercase tracking-wider">TYPE</span>
+          <span class="text-ink">MEMORY_LOG</span>
       </div>
     </div>
   </div>
 
+  <!-- Table of Contents Card -->
   {safeHeadings.length > 0 && (
-    <div class="card toc-card">
-      <div class="card-header">INDEX</div>
-      <div class="card-body">
-        <ul class="toc">
+    <div class="bg-surface border border-line shadow-sm hidden lg:block">
+      <div class="bg-white/5 border-b border-line px-4 py-2 font-bold text-ink tracking-widest uppercase flex items-center gap-2">
+        <span class="text-signal">::</span> INDEX
+      </div>
+      <div class="p-4">
+        <ul class="space-y-2">
           {safeHeadings.filter(h => h.depth <= 3).map((heading) => (
-            <li class={`depth-${heading.depth}`}>
-              <a href={`#${heading.slug}`}>{heading.text}</a>
+            <li class={`transition-colors hover:text-candle ${heading.depth === 3 ? 'pl-3 text-[10px] opacity-80' : ''}`}>
+              <a href={`#${heading.slug}`} class="block py-0.5 truncate border-l-2 border-transparent hover:border-signal pl-2 -ml-2">
+                {heading.text}
+              </a>
             </li>
           ))}
         </ul>
@@ -56,14 +66,24 @@ const safeRelatedPosts = Array.isArray(relatedPosts) ? relatedPosts : [];
     </div>
   )}
 
+  <!-- Related Posts Card -->
   {safeRelatedPosts.length > 0 && (
-    <div class="card related-card">
-      <div class="card-header">RELATED_ENTRIES</div>
-      <div class="card-body">
-        <ul class="related">
+    <div class="bg-surface border border-line shadow-sm">
+      <div class="bg-white/5 border-b border-line px-4 py-2 font-bold text-ink tracking-widest uppercase flex items-center gap-2">
+        <span class="text-signal">::</span> RELATED_ENTRIES
+      </div>
+      <div class="p-4">
+        <ul class="space-y-3">
             {safeRelatedPosts.map(post => (
                 <li>
-                    <a href={`${baseUrl}blog/${post.id}/`}>{post.data.title}</a>
+                    <a href={`${baseUrl}blog/${post.id}/`} class="block group">
+                      <span class="text-link group-hover:text-candle transition-colors block mb-0.5 leading-tight">
+                        {post.data.title}
+                      </span>
+                      <span class="text-[10px] text-ink-dim/50 group-hover:text-ink-dim transition-colors">
+                        {new Date(post.data.pubDate).toISOString().split('T')[0]}
+                      </span>
+                    </a>
                 </li>
             ))}
         </ul>
@@ -71,79 +91,3 @@ const safeRelatedPosts = Array.isArray(relatedPosts) ? relatedPosts : [];
     </div>
   )}
 </aside>
-
-<style>
-  .metadata-sidebar {
-    font-family: var(--font-mono);
-    font-size: var(--text-xs);
-    color: var(--funes-text-dim);
-    padding-top: var(--space-md);
-  }
-
-  .card {
-    border: 1px solid var(--funes-text-dimmer);
-    margin-bottom: var(--space-lg);
-    background: var(--funes-bg-paper);
-    box-shadow: var(--shadow-card);
-  }
-
-  .card-header {
-    background: var(--funes-bg-hover);
-    padding: var(--space-xs) var(--space-sm);
-    border-bottom: 1px solid var(--funes-text-dimmer);
-    font-weight: bold;
-    color: var(--funes-text-main);
-    letter-spacing: 1px;
-  }
-
-  .card-body {
-    padding: var(--space-sm);
-  }
-
-  .field {
-    margin-bottom: var(--space-sm);
-  }
-
-  .label {
-    display: block;
-    color: var(--funes-text-dimmer);
-    font-size: 0.8em;
-  }
-
-  .value {
-    color: var(--funes-text-main);
-  }
-
-  .tags {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 4px;
-  }
-
-  .tag {
-    color: var(--funes-link);
-  }
-
-  ul {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-  }
-
-  li {
-    margin-bottom: 4px;
-  }
-
-  a {
-    color: var(--funes-text-dim);
-    text-decoration: none;
-  }
-
-  a:hover {
-    color: var(--funes-terminal);
-    text-decoration: underline;
-  }
-
-  .depth-2 { padding-left: 0; }
-  .depth-3 { padding-left: var(--space-sm); }
-</style>
