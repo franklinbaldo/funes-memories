@@ -1,5 +1,4 @@
 ---
-// components/IndexCard.astro
 import FormattedDate from './FormattedDate.astro';
 
 interface Props {
@@ -19,131 +18,43 @@ const baseUrl = baseUrlRaw.endsWith('/') ? baseUrlRaw : `${baseUrlRaw}/`;
 const catalogNumber = id ? `MEM.${id}` : `MEM.${date.getFullYear()}.${Math.floor(Math.random() * 1000).toString().padStart(3, '0')}`;
 ---
 
-<a href={`${baseUrl}blog/${slug}/`} class="index-card-link">
-  <article class="index-card">
-    <div class="card-header">
-      <span class="catalog-number">{catalogNumber}</span>
-      <span class="hole-punch"></span>
+<a href={`${baseUrl}blog/${slug}/`} class="block mb-8 group no-underline">
+  <article class="bg-surface border border-line p-6 shadow-sm transition-all duration-300 group-hover:-translate-y-0.5 group-hover:shadow-md group-hover:border-ink-dim/30 relative overflow-hidden">
+
+    <!-- Header with Hole Punch -->
+    <div class="flex justify-between items-center border-b border-line pb-2 mb-4">
+      <span class="font-mono text-xs text-ink-dim tracking-widest uppercase group-hover:text-signal transition-colors">{catalogNumber}</span>
+      <div class="w-3 h-3 rounded-full bg-void shadow-[inset_0_1px_3px_rgba(0,0,0,0.8)] border border-white/5"></div>
     </div>
 
-    <div class="card-content">
-      <h3 class="title">{title.toUpperCase()}</h3>
-      <div class="timestamp">
+    <!-- Content -->
+    <div class="flex flex-col gap-3">
+      <h3 class="font-serif text-xl md:text-2xl text-ink leading-tight group-hover:text-candle transition-colors">
+        {title}
+      </h3>
+
+      <div class="font-mono text-xs text-ink-dim">
         <FormattedDate date={date} />
       </div>
 
       {description && (
-        <p class="description">{description}</p>
+        <p class="text-sm text-ink/70 leading-relaxed line-clamp-3 mb-2 font-serif">
+          {description}
+        </p>
       )}
 
-      <div class="tags">
-        {tags.map(tag => <span class="tag">#{tag}</span>)}
-      </div>
+      {tags.length > 0 && (
+        <div class="flex flex-wrap gap-2 mt-2">
+          {tags.map(tag => (
+            <span class="font-mono text-[10px] text-link opacity-70 group-hover:opacity-100 transition-opacity">#{tag}</span>
+          ))}
+        </div>
+      )}
     </div>
 
-    <div class="card-footer">
-      <span class="read-more">[ACCESS MEMORY →]</span>
+    <!-- Footer -->
+    <div class="mt-6 pt-3 border-t border-dashed border-line text-right">
+      <span class="font-mono text-xs text-signal font-bold group-hover:text-candle transition-colors">[ACCESS MEMORY →]</span>
     </div>
   </article>
 </a>
-
-<style>
-  .index-card-link {
-    text-decoration: none;
-    display: block;
-    margin-bottom: var(--space-lg);
-  }
-
-  .index-card {
-    background: var(--funes-bg-paper);
-    border: 1px solid var(--funes-text-dimmer);
-    padding: var(--space-md);
-    box-shadow: var(--shadow-card);
-    transition: transform var(--transition-fast), box-shadow var(--transition-fast);
-    position: relative;
-    overflow: hidden;
-  }
-
-  .index-card:hover {
-    transform: translateY(-2px);
-    box-shadow: var(--shadow-lifted);
-    border-color: var(--funes-terminal);
-  }
-
-  .card-header {
-    border-bottom: 1px solid var(--funes-text-dimmer);
-    padding-bottom: var(--space-xs);
-    margin-bottom: var(--space-md);
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
-
-  .catalog-number {
-    font-family: var(--font-mono);
-    font-size: var(--text-xs);
-    color: var(--funes-text-dim);
-    letter-spacing: 1px;
-  }
-
-  .hole-punch {
-    width: 12px;
-    height: 12px;
-    background: var(--funes-bg-dark);
-    border-radius: 50%;
-    box-shadow: inset 0 1px 3px rgba(0,0,0,0.5);
-  }
-
-  .title {
-    font-family: var(--font-serif);
-    font-size: var(--text-lg);
-    color: var(--funes-text-main);
-    margin: 0 0 var(--space-xs) 0;
-    line-height: 1.2;
-  }
-
-  .timestamp {
-    font-family: var(--font-mono);
-    font-size: var(--text-xs);
-    color: var(--funes-text-dim);
-    margin-bottom: var(--space-md);
-  }
-
-  .description {
-    font-size: var(--text-sm);
-    color: var(--funes-text-dim);
-    margin-bottom: var(--space-md);
-    line-height: 1.5;
-    display: -webkit-box;
-    -webkit-line-clamp: 3;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-  }
-
-  .tags {
-    display: flex;
-    flex-wrap: wrap;
-    gap: var(--space-xs);
-    margin-bottom: var(--space-md);
-  }
-
-  .tag {
-    font-family: var(--font-mono);
-    font-size: var(--text-xs);
-    color: var(--funes-link);
-    opacity: 0.8;
-  }
-
-  .card-footer {
-    border-top: 1px dashed var(--funes-text-dimmer);
-    padding-top: var(--space-sm);
-    text-align: right;
-  }
-
-  .read-more {
-    font-family: var(--font-mono);
-    font-size: var(--text-xs);
-    color: var(--funes-terminal);
-    font-weight: bold;
-  }
-</style>

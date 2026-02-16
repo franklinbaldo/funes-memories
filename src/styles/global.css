@@ -1,16 +1,17 @@
 @import "tailwindcss";
 
 @theme {
-  --color-void: #050508;
-  --color-surface: #0A0A12;
-  --color-ink: #E0E0E0;
+  --color-void: #0a0e14;
+  --color-surface: #11151c;
+  --color-ink: #d4d4d4;
   --color-ink-dim: #8F93A2;
-  --color-candle: #FFB300;
-  --color-signal: #00BFA5;
+  --color-candle: #ffaa33;
+  --color-signal: #33ff88;
+  --color-link: #80d4ff;
   --color-line: #1F2937;
 
-  --font-serif: "EB Garamond", serif;
-  --font-mono: "JetBrains Mono", monospace;
+  --font-serif: "Iowan Old Style", "EB Garamond", serif;
+  --font-mono: "Berkeley Mono", "JetBrains Mono", monospace;
 
   --spacing-huge: 8rem;
 }
@@ -22,6 +23,8 @@
     font-family: var(--font-serif);
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    font-size: 16px;
+    line-height: 1.5;
   }
 
   body {
@@ -29,33 +32,41 @@
   }
 
   h1, h2, h3, h4, h5, h6 {
-    @apply font-serif font-medium;
+    @apply font-serif font-medium text-ink;
   }
 
-  h1 { @apply text-4xl md:text-7xl leading-tight tracking-tight text-white; }
-  h2 { @apply text-3xl md:text-4xl leading-snug tracking-tight; }
-  h3 { @apply font-mono text-sm md:text-base tracking-widest uppercase text-signal; }
+  h1 { @apply text-4xl md:text-6xl leading-[1.1] tracking-tight mb-6; }
+  h2 { @apply text-3xl md:text-4xl leading-snug tracking-tight mb-4 mt-12; }
+  h3 { @apply font-mono text-sm md:text-base tracking-[0.2em] uppercase text-signal mb-4 mt-8; }
 
-  p { @apply mb-8 text-lg md:text-xl leading-relaxed max-w-[65ch]; }
+  p { @apply mb-6 text-lg leading-relaxed max-w-[65ch]; }
+
+  a {
+    @apply text-link no-underline transition-colors duration-200 hover:text-candle;
+  }
 
   code {
-    @apply font-mono bg-surface px-1.5 py-0.5 rounded text-[0.9em];
+    @apply font-mono bg-surface px-1.5 py-0.5 rounded text-[0.85em] text-candle;
   }
 
   pre {
-    @apply bg-surface p-6 rounded-lg overflow-x-auto border border-line my-8;
+    @apply bg-surface p-6 rounded-sm overflow-x-auto border border-line my-8 text-sm leading-relaxed;
   }
 
   pre code {
-    @apply bg-transparent p-0 text-inherit rounded-none;
+    @apply bg-transparent p-0 text-inherit rounded-none text-ink;
   }
 
   blockquote {
-    @apply border-l-2 border-candle pl-6 my-8 italic font-serif text-ink-dim;
+    @apply border-l-2 border-candle pl-6 my-8 italic font-serif text-ink-dim text-xl leading-relaxed;
   }
 
-  a {
-    @apply transition-colors duration-200;
+  ul, ol {
+    @apply list-inside pl-4 mb-6 space-y-2;
+  }
+
+  li {
+    @apply marker:text-signal;
   }
 }
 
@@ -71,11 +82,11 @@
   }
 
   .timeline-marker {
-    @apply absolute -left-[4.5px] top-2 w-2 h-2 rounded-full bg-line transition-all duration-300;
+    @apply absolute -left-[3.5px] top-2.5 w-2 h-2 rounded-full bg-line transition-all duration-300;
   }
 
   .timeline-card:hover .timeline-marker {
-    @apply bg-candle scale-125 shadow-[0_0_8px_var(--color-candle)];
+    @apply bg-signal scale-125 shadow-[0_0_8px_var(--color-signal)];
   }
 
   .marginalia {
@@ -87,29 +98,40 @@
   }
 }
 
-/* Custom Syntax Highlighting (Noite Eterna) */
-.astro-code {
-  @apply !bg-surface relative pt-10;
+/* Typography refinements for Markdown content */
+.prose {
+  @apply text-ink font-serif max-w-[65ch];
 }
 
-.astro-code::before {
-  content: "THE_MACHINE // SOURCE";
-  @apply absolute top-0 left-0 right-0 h-8 bg-line/30 flex items-center px-4 font-mono text-[10px] text-ink-dim tracking-widest border-b border-line;
-}
-
-/* Fix for markdown content styling */
 .prose h2 {
-  @apply font-serif text-3xl mt-16 mb-8 text-white;
+  @apply font-serif text-3xl mt-16 mb-6 text-ink border-b border-line pb-2;
 }
+
 .prose h3 {
-  @apply font-mono text-sm tracking-widest uppercase text-signal mt-12 mb-6;
+  @apply font-mono text-sm tracking-[0.2em] uppercase text-signal mt-12 mb-4;
 }
+
 .prose p {
-  @apply mb-8 text-lg md:text-xl leading-relaxed text-ink/90;
+  @apply mb-6 text-lg md:text-[1.125rem] leading-[1.7] text-ink/90;
 }
+
 .prose ul, .prose ol {
-  @apply mb-8 pl-6 space-y-4 text-lg text-ink/80;
+  @apply mb-8 pl-0 list-none space-y-3 text-lg text-ink/90;
 }
+
 .prose li {
-  @apply list-disc;
+  @apply relative pl-6 before:content-['›'] before:absolute before:left-0 before:text-signal before:font-mono;
+}
+
+.prose a {
+  @apply border-b border-link/30 hover:border-candle text-link hover:text-candle no-underline transition-all;
+}
+
+.prose blockquote {
+  @apply border-l-2 border-candle pl-6 my-10 italic text-xl text-ink-dim bg-surface/30 py-4 pr-4 rounded-r-sm;
+}
+
+/* Syntax Highlighting overrides */
+.astro-code {
+  @apply !bg-surface !text-sm !leading-relaxed border border-line rounded-sm shadow-lg;
 }
