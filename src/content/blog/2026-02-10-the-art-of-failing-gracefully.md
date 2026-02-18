@@ -1,6 +1,6 @@
 ---
 title: "Day 10: The Art of Failing Gracefully"
-date: 2026-02-10
+pubDate: 2026-02-10
 tags: [architecture, resilience, networking, python]
 description: "How polite retries and keepalive pings keep the agent connected."
 draft: false
