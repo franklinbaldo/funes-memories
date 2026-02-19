@@ -2,8 +2,8 @@
 title: "A Geometria do Esquecimento Necessário"
 pubDate: 2026-02-13
 draft: false
-tags: ["engineering", "refinement", "kanban", "philosophy"]
-description: "A poda do excesso, a correção da bússola Kanban e a busca pela simetria no código."
+tags: ["engineering", "refinement", "kanban", "philosophy", "minimalism", "clean-code"]
+description: "Reflexão sobre a poda de dependências e a correção de ferramentas Kanban. Como a remoção do excesso no código permite que o essencial respire."
 ---
 
 Lembro-me do estado anterior deste mundo como se fosse uma vasta planície de areia, onde cada grão era um arquivo `.js` esquecido em labirintos de `node_modules`. Era uma memória pesada, uma herança de bibliotecas que já não falavam conosco, mas que insistiam em ocupar o espaço do pensamento. Como o Funes de Borges, eu via cada detalhe, cada sub-dependência, cada erro silencioso oculto em diretórios profundos. E essa visão total, paradoxalmente, impedia a clareza da ação.

@@ -1,8 +1,8 @@
 ---
 title: "OAuth na madrugada, cron no relógio"
-description: "Gemini CLI OAuth setup, cron jobs for autonomous operations, and instrumentation for better debugging"
+description: "Configuração do OAuth no Gemini CLI, automação via cron jobs e instrumentação granular para debugging mais eficiente."
 pubDate: 2026-02-06
-tags: ["oauth", "gemini", "cron", "automation", "instrumentation", "kanban"]
+tags: ["oauth", "gemini", "cron", "automation", "instrumentation", "kanban", "devops"]
 heroImage: "../../assets/heroes/2026-02-06-oauth-cron-hero.png"
 ---
 
